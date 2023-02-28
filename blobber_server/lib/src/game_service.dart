@@ -13,7 +13,7 @@ import 'package:rxdart/rxdart.dart';
 class GameService extends GameServiceBase {
   final _game = BehaviorSubject<Game>.seeded(
     Game(
-      size: maxSize,
+      size: mapSize,
       players: [],
     ),
   );
@@ -21,33 +21,48 @@ class GameService extends GameServiceBase {
   @override
   Stream<Game> joinGame(ServiceCall call, Player request) {
     final c = Timer.periodic(
-      const Duration(milliseconds: 100),
+      const Duration(milliseconds: 1000),
       (timer) {
         _game.add(
           _game.value
-            ..addPlayer(
-              Player(
+            ..blobs.add(
+              Blobbo(
                 position: Position(
-                  x: Random().nextInt(maxSize).toDouble(),
-                  y: Random().nextInt(maxSize).toDouble(),
+                  x: Random().nextDouble() * mapSize,
+                  y: Random().nextDouble() * mapSize,
                 ),
-                size: 5,
+                size: Random().nextDouble() * initialPlayerSize,
               ),
             ),
         );
       },
     );
 
-    _game.add(_game.value..addPlayer(request));
+    _game.add(
+      _game.value
+        ..addPlayer(
+          Player(
+            id: request.id,
+            name: request.name,
+            size: initialPlayerSize,
+            position: Position(
+              x: Random().nextDouble() * mapSize,
+              y: Random().nextDouble() * mapSize,
+            ),
+          ),
+        ),
+    );
     return _game.stream;
   }
 
   @override
   Future<Empty> updatePosition(ServiceCall call, Input request) async {
     print(request);
+
     final p = _game.value.players.firstWhere(
       (element) => element.id == request.playerID,
     );
+
     final newPosition = p.position.update(
       request.direction,
       100 / p.size,
@@ -55,13 +70,24 @@ class GameService extends GameServiceBase {
 
     p.position = newPosition;
 
-    final intersecator = _game.value.players.firstWhereOrNull(
-      (e) => (e.id != p.id) && (p.intersects(e)),
+    final eatableBlobs = _game.value.blobs.where(
+      (e) => p.intersects(e.position, e.size),
     );
 
-    if (intersecator != null && intersecator.size != p.size) {
+    for (final b in eatableBlobs) {
+      p.sum(b.size);
       _game.add(
-        _game.value..clash(intersecator, p),
+        _game.value..removeBlobbo(b),
+      );
+    }
+
+    final playerIntersecator = _game.value.players.firstWhereOrNull(
+      (e) => (e.id != p.id) && (p.intersects(e.position, e.size)),
+    );
+
+    if (playerIntersecator != null && playerIntersecator.size != p.size) {
+      _game.add(
+        _game.value..clash(playerIntersecator, p),
       );
 
       return Future.value(Empty());

@@ -1,5 +1,6 @@
 import 'package:blobber_client/gen/game.pb.dart';
 import 'package:blobber_client/service.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -64,6 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
               }
 
               final game = snapshot.data!;
+
+              final score = game.players.firstWhereOrNull((element) => element.id == service.id)?.size.toStringAsPrecision(4) ?? 'You dead';
               return Stack(
                 children: [
                   Container(
@@ -77,25 +80,46 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   ),
-                  ...game.players.map(
+                  ...game.blobs.map(
                     (e) {
-                      final color = Colors.red;
-
                       return AnimatedPositioned(
-                        key: ValueKey(e.id),
-                        left: e.position.x - (e.size! / 2),
-                        bottom: e.position.y - (e.size! / 2),
+                        key: ValueKey("${e.position.x}|${e.position.y}"),
+                        left: e.position.x - (e.size / 2),
+                        bottom: e.position.y - (e.size / 2),
                         duration: const Duration(milliseconds: 50),
                         child: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
-                            color: color,
+                            color: Colors.blue,
                           ),
                           width: e.size,
                           height: e.size,
                         ),
                       );
                     },
+                  ),
+                  ...game.players.map(
+                    (e) {
+                      return AnimatedPositioned(
+                        key: ValueKey(e.id),
+                        left: e.position.x - (e.size / 2),
+                        bottom: e.position.y - (e.size / 2),
+                        duration: const Duration(milliseconds: 50),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.red,
+                          ),
+                          width: e.size,
+                          height: e.size,
+                        ),
+                      );
+                    },
+                  ),
+                  Positioned(
+                    top: 20,
+                    right: 20,
+                    child: Text("Score: $score"),
                   ),
                 ],
               );

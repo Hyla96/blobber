@@ -1,4 +1,5 @@
 import 'package:blobber_server/gen/game.pb.dart';
+import 'package:blobber_server/src/extensions/player_extension.dart';
 
 extension GameExtension on Game {
   void addPlayer(Player player) {
@@ -20,11 +21,13 @@ extension GameExtension on Game {
     _removePlayer(p1);
 
     if (p1.size > p2.size) {
-      p1.size = (p1.size + (p2.size * 0.5)).toDouble();
-      addPlayer(p1);
+      addPlayer(p1..sum(p2.size));
     } else {
-      p2.size = (p2.size + (p1.size * 0.5)).toDouble();
-      addPlayer(p2);
+      addPlayer(p2..sum(p1.size));
     }
+  }
+
+  void removeBlobbo(Blobbo blobbo) {
+    blobs.remove(blobbo);
   }
 }

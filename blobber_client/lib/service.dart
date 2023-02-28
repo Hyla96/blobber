@@ -10,7 +10,7 @@ class Service extends ViewModel {
       'localhost',
       port: 50051,
       options: ChannelOptions(
-        credentials: ChannelCredentials.insecure(),
+        credentials: const ChannelCredentials.insecure(),
         codecRegistry: CodecRegistry(codecs: const [GzipCodec(), IdentityCodec()]),
       ),
     );
@@ -19,18 +19,15 @@ class Service extends ViewModel {
     subscriptions.add(
       stub
           .joinGame(
-        Player(
-          id: id,
-          size: 10,
-          position: Position(x: 0, y: 0),
-        ),
-      )
+            Player(
+              id: id,
+              size: 10,
+              position: Position(x: 0, y: 0),
+            ),
+          )
           .listen(
-        (value) {
-          print(value);
-          game.add(value);
-        },
-      ),
+            game.add,
+          ),
     );
   }
 
@@ -43,7 +40,13 @@ class Service extends ViewModel {
     );
   }
 
-  final id = Uuid().v4();
+  final id = const Uuid().v4();
   final game = BehaviorSubject<Game>();
   late GameServiceClient stub;
+}
+
+extension PlayerExtension on Player {
+  bool hasDifferentPosition(Position? other) {
+    return other?.x != position.x || other?.y != position.y;
+  }
 }

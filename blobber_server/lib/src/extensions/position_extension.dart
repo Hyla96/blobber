@@ -3,7 +3,7 @@ import 'package:blobber_server/src/constants.dart';
 
 extension PositionExtension on Position {
   Position update(Direction d, double speed) {
-    const max = maxSize;
+    const max = mapSize;
     const min = 0;
     switch (d) {
       case Direction.DIRECTION_UP:

@@ -9,8 +9,14 @@ service GameService {
 
 message Game {
     string id = 1;
-    repeated Player players = 2;
-    int32 size = 3;
+    float size = 2;
+    repeated Player players = 3;
+    repeated Blobbo blobs = 4;
+}
+
+message Blobbo {
+    Position position = 1;
+    float size = 2;
 }
 
 message Player {
