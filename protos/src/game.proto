@@ -2,9 +2,15 @@ syntax = "proto3";
 
 package game;
 
+service GameService {
+    rpc JoinGame(Player) returns (stream Game) {}
+    rpc UpdatePosition(Input) returns (Empty) {}
+}
+
 message Game {
     string id = 1;
     repeated Player players = 2;
+    int32 size = 3;
 }
 
 message Player {
@@ -15,6 +21,22 @@ message Player {
 }
 
 message Position {
-    string x = 1;
+    float x = 1;
     float y = 2;
+}
+
+message Input {
+    string playerID = 1;
+    Direction direction = 2;
+}
+
+enum Direction {
+    DIRECTION_UP = 0;
+    DIRECTION_DOWN = 1;
+    DIRECTION_LEFT = 2;
+    DIRECTION_RIGHT = 3;
+}
+
+message Empty {
+
 }

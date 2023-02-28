@@ -13,4 +13,4 @@ build/
 coverage/
 
 # Generated files
-src/gen/**
+lib/gen/**
