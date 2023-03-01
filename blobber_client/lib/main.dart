@@ -1,7 +1,7 @@
 import 'package:blobber_client/gen/game.pb.dart';
+import 'package:blobber_client/painters/blobbo_painter.dart';
+import 'package:blobber_client/painters/player_painter.dart';
 import 'package:blobber_client/service.dart';
-import 'package:blobber_client/view/blobbo.dart';
-import 'package:blobber_client/view/player.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -83,10 +83,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   ...game.blobs.map(
-                    BlobboWidget.new,
+                    (e) => CustomPaint(
+                      painter: BlobboPainter(e),
+                    ),
                   ),
                   ...game.players.map(
-                    PlayerWidget.new,
+                    (e) => CustomPaint(
+                      painter: PlayerPainter(e),
+                    ),
                   ),
                   Positioned(
                     top: 20,
