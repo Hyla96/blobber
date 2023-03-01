@@ -1,5 +1,7 @@
 import 'package:blobber_client/gen/game.pb.dart';
 import 'package:blobber_client/service.dart';
+import 'package:blobber_client/view/blobbo.dart';
+import 'package:blobber_client/view/player.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -81,45 +83,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   ...game.blobs.map(
-                    (e) {
-                      return AnimatedPositioned(
-                        key: ValueKey("${e.position.x}|${e.position.y}"),
-                        left: e.position.x - (e.size / 2),
-                        bottom: e.position.y - (e.size / 2),
-                        duration: const Duration(milliseconds: 50),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.blue,
-                          ),
-                          width: e.size,
-                          height: e.size,
-                        ),
-                      );
-                    },
+                    BlobboWidget.new,
                   ),
                   ...game.players.map(
-                    (e) {
-                      return AnimatedPositioned(
-                        key: ValueKey(e.id),
-                        left: e.position.x - (e.size / 2),
-                        bottom: e.position.y - (e.size / 2),
-                        duration: const Duration(milliseconds: 50),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.red,
-                          ),
-                          width: e.size,
-                          height: e.size,
-                        ),
-                      );
-                    },
+                    PlayerWidget.new,
                   ),
                   Positioned(
                     top: 20,
                     right: 20,
-                    child: Text("Score: $score"),
+                    child: Text('Score: $score'),
                   ),
                 ],
               );
