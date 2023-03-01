@@ -15,6 +15,7 @@ extension PlayerExtension on Player {
   }
 
   void sum(double size) {
-    this.size += size * 0.5;
+    final factor = (log(this.size) * log(this.size)) / this.size;
+    this.size += size * factor;
   }
 }
