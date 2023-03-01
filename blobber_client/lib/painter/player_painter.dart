@@ -1,5 +1,5 @@
 import 'package:blobber_client/gen/game.pb.dart';
-import 'package:blobber_client/utils.dart';
+import 'package:blobber_client/util/utils.dart';
 import 'package:flutter/material.dart';
 
 class PlayerPainter extends CustomPainter {

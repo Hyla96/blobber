@@ -1,7 +1,7 @@
 import 'package:blobber_client/gen/game.pb.dart';
-import 'package:blobber_client/painters/blobbo_painter.dart';
-import 'package:blobber_client/painters/player_painter.dart';
-import 'package:blobber_client/service.dart';
+import 'package:blobber_client/painter/blobbo_painter.dart';
+import 'package:blobber_client/painter/player_painter.dart';
+import 'package:blobber_client/service/game_service.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,7 +36,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final service = Service();
+  final service = GameService();
 
   @override
   Widget build(BuildContext context) {

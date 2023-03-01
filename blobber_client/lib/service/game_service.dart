@@ -1,11 +1,11 @@
 import 'package:blobber_client/gen/game.pbgrpc.dart';
-import 'package:blobber_client/vm.dart';
+import 'package:blobber_client/util/vm.dart';
 import 'package:grpc/grpc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 
-class Service extends ViewModel {
-  Service() {
+class GameService extends ViewModel {
+  GameService() {
     final channel = ClientChannel(
       'localhost',
       port: 50051,
